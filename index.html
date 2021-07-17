@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<script>
+
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var source = [];
+var bufferLike = [];
+var gainNode = [];
+var daya = ["https://archive.org/download/loyalteesigsnare/LoyalteesigSnare.wav",
+"https://archive.org/download/loyalteesig-hi-hat/LoyalteesigHi%20Hat.WAV",
+ "https://archive.org/download/trap-crash/Trap%20Crash.wav",
+"https://archive.org/download/calm-club-808/Calm%20Club%20808.wav"];
+
+
+
+var i;
+for (i = 0; i < 4; i++) {
+
+
+createSound(daya[i]);
+};
+
+
+
+function createSound(inyh) {
+
+
+  var request = new XMLHttpRequest();
+
+  request.open("GET", inyh, true);
+
+  request.responseType = 'arraybuffer';
+
+  request.onload = function() {
+
+    audioData = request.response;
+    audioCtx.decodeAudioData(audioData, function(buffer) {
+    
+       bufferLike.push(buffer);
+    
+      },
+
+      function(e){ console.log("Error with decoding audio data" + e.err); });
+
+  }
+
+  request.send();
+
+
+};
+
+
+setInterval(function(){ 
+
+ source[0] = audioCtx.createBufferSource();
+  source[0].buffer = bufferLike[3];
+  source[0].connect(audioCtx.destination);
+  source[0].loop = false;
+  source[0].start();
+
+  
+
+
+}, 15000);
+
+
+</script>
+
+</body>
+</html>
